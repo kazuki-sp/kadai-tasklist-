@@ -1,7 +1,13 @@
 class TasksController < ApplicationController
   before_action :set_message, only: [:show, :edit, :update, :destroy]
+  before_action :require_user_logged_in
+  
   def index
-    @tasks = Task.all.page(params[:page])
+    if logged_in?
+      @tasks = current_user.tasks.order(id: :desc).page(params[:page])
+      #@tasks = Task.all.page(params[:page])
+    end
+    
   end
 
   def show
@@ -12,16 +18,17 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
-    
+    @task = current_user.tasks.build(task_params)
     if @task.save
-      flash[:success] =  '正常に登録できました'
-      redirect_to @task
+      flash[:success] = 'メッセージを投稿しました。'
+      redirect_to root_url
     else
-      flash.now[:danger] = '登録できませんでした'
-      render :new
+      @tasks = current_user.tasks.order(id: :desc).page(params[:page])
+      flash.now[:danger] = 'メッセージの投稿に失敗しました。'
+      render 'toppages/index'
     end
   end
+  
 
   def edit
   end

@@ -1,20 +1,29 @@
+<% if logged_in? %>
+<% else %>
+<% end %>
 <header class="mb-4">
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">タスク管理</a>
+    <% if logged_in? %>        <!--ログインしてあったら一覧ページへ-->
+      <a class="navbar-brand" href="/tasks">タスク管理</a>
+      <!-- 横幅が狭い時に出るハンバーガーボタン -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+    <% else %>               <!--ログインしてなかったらログインページへ-->
+      <a class="navbar-brand" href="/login">タスク管理</a>
     <!-- 横幅が狭い時に出るハンバーガーボタン -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
       <span class="navbar-toggler-icon"></span>
     </button>
-
+    <% end %>
     <!-- メニュー項目 -->
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
       <ul class="navbar-nav">
-        <% if logged_in? %>
-          <li class="nav-item"><%= link_to 'Users', users_path, class: 'nav-link' %></li>
+        <% if logged_in? %>　　　　　　　　　　　　　　　　
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><%= current_user.name %></a>
             <ul class="dropdown-menu dropdown-menu-right">
-              <li class="dropdown-item"><%= link_to 'My profile', user_path(current_user) %></li>
               <li class="dropdown-divider"></li>
               <li class="dropdown-item"><%= link_to 'Logout', logout_path, method: :delete %></li>
             </ul>
